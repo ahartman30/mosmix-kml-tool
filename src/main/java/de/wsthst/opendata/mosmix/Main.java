@@ -7,7 +7,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,7 +18,7 @@ import java.util.List;
 
 import static java.time.ZoneOffset.UTC;
 
-public class Main {
+public final class Main {
 
     private String[] stationIds;
     private Path kmlFile;
@@ -40,7 +40,7 @@ public class Main {
         for (PointTimeForecast ptfc : ptfcs) {
             if (outFolder != null) {
                 Path outFile = outFolder.resolve("mosmix_" + ptfc.getStationId() + ".csv");
-                try (PrintWriter out = new PrintWriter(Files.newBufferedWriter(outFile, Charset.forName("UTF-8")))) {
+                try (PrintWriter out = new PrintWriter(Files.newBufferedWriter(outFile, StandardCharsets.UTF_8))) {
                     new CsvWriter().write(ptfc, out);
                 }
             } else {
@@ -64,22 +64,22 @@ public class Main {
         Options options = new Options();
         options.addOption(Option.builder()
             .longOpt("kml")
-            .argName("KML-Datei")
-            .desc("MOSMIX KML Datei. Modellaufzeit yyyMMddHH muss an dritter Stelle stehen.")
+            .argName("KML File")
+            .desc("MOSMIX KML file, underscore delimites. Model run time yyyyMMddHH has to be at third position.")
             .hasArg()
             .required()
             .build());
         options.addOption(Option.builder()
             .longOpt("stations")
-            .argName("Station1,Station2,...")
-            .desc("Stationskennungen welche extrahiert werden sollen, durch Komma getrennt.")
+            .argName("station1,station2,...")
+            .desc("Comma delimited station identifiers, whose data will be extracted.")
             .hasArg()
             .required()
             .build());
         options.addOption(Option.builder()
             .longOpt("out")
-            .argName("Ausgabeverzeichnis")
-            .desc("Ausgabeverzeichnis für die CSV-Dateien. Ohne Angabe erfoglt die Ausgabe auf die Konsole.")
+            .argName("Output directory")
+            .desc("Output directory for the CSV file, else output to console standard out.")
             .hasArg()
             .build());
 

@@ -1,9 +1,7 @@
 package de.wsthst.opendata.mosmix;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.ListMultimap;
-import org.apache.commons.math3.util.Precision;
 import tec.uom.se.quantity.Quantities;
 
 import javax.measure.Quantity;
@@ -16,18 +14,20 @@ import java.io.InputStream;
 import java.time.Instant;
 import java.util.*;
 
-import static java.util.Comparator.naturalOrder;
 import static tec.units.ri.unit.MetricPrefix.MILLI;
 import static tec.units.ri.unit.Units.*;
 
 /**
  * Responsible for parsing a MOSMIX KML file and extracting the given stations as value objects.
  */
-public class MosmixKmlReader {
+public final class MosmixKmlReader {
 
-    private XMLInputFactory xmlFactory;
+    private final XMLInputFactory xmlFactory;
     private XMLStreamReader parser;
 
+    /**
+     * Constructor.
+     */
     public MosmixKmlReader() {
         xmlFactory = XMLInputFactory.newFactory();
     }
@@ -74,16 +74,7 @@ public class MosmixKmlReader {
                 forecastTimes.forEach(forecastTime -> forecasts.add(new Forecast(forecastTime)));
                 PointTimeForecast ptfc = new PointTimeForecast(stationId, lat, lon, height, modelRunTime, forecasts);
 
-                /*
-                TODO: SRP - Extract class, call after parsing
-                 */
-                Queue<Integer> ww3Queue = EvictingQueue.create(3);
-                Queue<Double> rr3Queue = EvictingQueue.create(3);
-                Queue<Double> rr12Queue = EvictingQueue.create(12);
-                Queue<Double> rr24Queue = EvictingQueue.create(24);
-                Queue<Double> sund3Queue = EvictingQueue.create(3);
-                Queue<Double> sund24Queue = EvictingQueue.create(24);
-                Queue<Double> ttt24Queue = EvictingQueue.create(24);
+                MeteoCalculator calculator = new MeteoCalculator();
                 for (int step = 0; step < forecastTimes.size(); step++) {
                     Forecast fc = ptfc.getForecast(step + 1);
                     fc.setPPPP(parseNumericValue(dataForElements.get(MosmixKmlSchema.PPPP_SYMBOL).get(step)), MosmixKmlSchema.PPPP_UNIT);
@@ -103,55 +94,18 @@ public class MosmixKmlReader {
                     fc.setRR3(parseNumericValue(dataForElements.get(MosmixKmlSchema.RR3_SYMBOL).get(step)), MosmixKmlSchema.RR_UNIT);
                     fc.setSUND1(parseNumericValue(dataForElements.get(MosmixKmlSchema.SUND1_SYMBOL).get(step)), MosmixKmlSchema.SUND_UNIT);
 
-                    // WW3
-                    ww3Queue.offer(fc.getWW());
-                    if (step >= 2) {
-                        int ww3 = ww3Queue.stream().max(naturalOrder()).get();
-                        fc.setWW3(ww3);
-                    }
+                    calculator.addTTT(fc.getTTT(KELVIN));
+                    calculator.addRR1(fc.getRR1(MILLI(METRE)));
+                    calculator.addWW(fc.getWW());
+                    calculator.addSUND1(fc.getSUND1(SECOND));
 
-                    // RR3
-                    rr3Queue.offer(fc.getRR1(MILLI(METRE)));
-                    if (step >= 2) {
-                        double rr3 = rr3Queue.stream().mapToDouble(Double::doubleValue).sum();
-                        fc.setRR3(rr3, MILLI(METRE));
-                    }
-
-                    // RR12
-                    rr12Queue.offer(fc.getRR1(MILLI(METRE)));
-                    if (step >= 11) {
-                        double rr12 = rr12Queue.stream().mapToDouble(Double::doubleValue).sum();
-                        fc.setRR12(rr12, MILLI(METRE));
-                    }
-
-                    // RR24
-                    rr24Queue.offer(fc.getRR1(MILLI(METRE)));
-                    if (step >= 23) {
-                        double rr24 = rr24Queue.stream().mapToDouble(Double::doubleValue).sum();
-                        fc.setRR24(rr24, MILLI(METRE));
-                    }
-
-                    // SUND3
-                    sund3Queue.offer(fc.getSUND1(SECOND));
-                    if (step >= 2) {
-                        double sund3 = sund3Queue.stream().mapToDouble(Double::doubleValue).sum();
-                        fc.setSUND3(sund3, SECOND);
-                    }
-
-                    // SUND24
-                    sund24Queue.offer(fc.getSUND1(SECOND));
-                    if (step >= 23) {
-                        double sund24 = sund24Queue.stream().mapToDouble(Double::doubleValue).sum();
-                        fc.setSUND24(sund24, SECOND);
-                    }
-
-                    // TM
-                    ttt24Queue.offer(fc.getTTT(KELVIN));
-                    if (step >= 23) {
-                        double tm = ttt24Queue.stream().mapToDouble(Double::doubleValue).average().getAsDouble();
-                        tm = Precision.round(tm, 2);
-                        fc.setTM(tm, KELVIN);
-                    }
+                    fc.setWW3(calculator.getWW3());
+                    fc.setTM(calculator.getTM(), KELVIN);
+                    fc.setRR3(calculator.getRR3(), MILLI(METRE));
+                    fc.setRR12(calculator.getRR12(), MILLI(METRE));
+                    fc.setRR24(calculator.getRR24(), MILLI(METRE));
+                    fc.setSUND3(calculator.getSUND3(), SECOND);
+                    fc.setSUND24(calculator.getSUND24(), SECOND);
                 }
                 ptfcs.add(ptfc);
             }

@@ -14,7 +14,7 @@ import static tec.units.ri.unit.MetricPrefix.HECTO;
 import static tec.units.ri.unit.MetricPrefix.MILLI;
 import static tec.units.ri.unit.Units.*;
 
-public class CsvWriter {
+public final class CsvWriter {
 
     public void write(PointTimeForecast ptfc, PrintWriter writer) {
         ZonedDateTime modelRunTimeUtc = ptfc.getModelRunTime().atZone(UTC);

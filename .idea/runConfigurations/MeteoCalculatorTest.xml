@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="MeteoCalculatorTest" type="JUnit" factoryName="JUnit">
+    <module name="mosmix-kml-tool" />
+    <option name="PACKAGE_NAME" value="de.wsthst.opendata.mosmix" />
+    <option name="MAIN_CLASS_NAME" value="de.wsthst.opendata.mosmix.MeteoCalculatorTest" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="class" />
+    <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

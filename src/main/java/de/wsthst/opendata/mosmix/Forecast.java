@@ -16,9 +16,9 @@ import static tec.units.ri.unit.Units.*;
 import static tec.uom.se.quantity.Quantities.getQuantity;
 
 /**
- * Value object for one forecast.
+ * Value object for one meteorological forecast.
  */
-public class Forecast implements Comparable<Forecast> {
+public final class Forecast implements Comparable<Forecast> {
 
     private Instant forecastTime;
     private Quantity<Pressure> pppp;
@@ -85,6 +85,9 @@ public class Forecast implements Comparable<Forecast> {
         pppp = getQuantity(value, unit);
     }
 
+    /**
+     * Returns the air pressure at sea level.
+     */
     public double getPPPP(Unit<Pressure> unit) {
         return pppp.to(unit).getValue().doubleValue();
     }
@@ -101,6 +104,9 @@ public class Forecast implements Comparable<Forecast> {
         ttt = getQuantity(value, unit);
     }
 
+    /**
+     * Return the temperature air.
+     */
     public double getTTT(Unit<Temperature> unit) {
         return ttt.to(unit).getValue().doubleValue();
     }
@@ -109,6 +115,9 @@ public class Forecast implements Comparable<Forecast> {
         td = getQuantity(value, unit);
     }
 
+    /**
+     * Returns the dew point.
+     */
     public double getTD(Unit<Temperature> unit) {
         return td.to(unit).getValue().doubleValue();
     }
@@ -117,22 +126,28 @@ public class Forecast implements Comparable<Forecast> {
         tn = getQuantity(value, unit);
     }
 
-    public double getTM(Unit<Temperature> unit) {
-        return tm.to(unit).getValue().doubleValue();
+    public double getTN(Unit<Temperature> unit) {
+        return tn.to(unit).getValue().doubleValue();
     }
 
     void setTM(double value, Unit<Temperature> unit) {
         tm = getQuantity(value, unit);
     }
 
-    public double getTN(Unit<Temperature> unit) {
-        return tn.to(unit).getValue().doubleValue();
+    /**
+     * Returns the temperature air daily mean of the last 24 hours.
+     */
+    public double getTM(Unit<Temperature> unit) {
+        return tm.to(unit).getValue().doubleValue();
     }
 
     void setT5cm(double value, Unit<Temperature> unit) {
         t5cm = getQuantity(value, unit);
     }
 
+    /**
+     * Returns the temperature air at 5 cm over ground.
+     */
     public double getT5cm(Unit<Temperature> unit) {
         return t5cm.to(unit).getValue().doubleValue();
     }
@@ -141,6 +156,9 @@ public class Forecast implements Comparable<Forecast> {
         dd = getQuantity(value, unit);
     }
 
+    /**
+     * Returns the wind direction.
+     */
     public double getDD(Unit<Angle> unit) {
         return dd.to(unit).getValue().doubleValue();
     }
@@ -149,6 +167,9 @@ public class Forecast implements Comparable<Forecast> {
         ff = getQuantity(value, unit);
     }
 
+    /**
+     * Returns the wind speed.
+     */
     public double getFF(Unit<Speed> unit) {
         return ff.to(unit).getValue().doubleValue();
     }
@@ -157,6 +178,9 @@ public class Forecast implements Comparable<Forecast> {
         fx1 = getQuantity(value, unit);
     }
 
+    /**
+     * Returns the wind highest gust within 1 hour.
+     */
     public double getFX1(Unit<Speed> unit) {
         return fx1.to(unit).getValue().doubleValue();
     }
@@ -165,6 +189,9 @@ public class Forecast implements Comparable<Forecast> {
         fx3 = getQuantity(value, unit);
     }
 
+    /**
+     * Returns the wind highest gust within 3 hours.
+     */
     public double getFX3(Unit<Speed> unit) {
         return fx3.to(unit).getValue().doubleValue();
     }
@@ -173,6 +200,9 @@ public class Forecast implements Comparable<Forecast> {
         n = getQuantity(value, unit);
     }
 
+    /**
+     * Returns the total cloud cover.
+     */
     public double getN(Unit<Dimensionless> unit) {
         return n.to(unit).getValue().doubleValue();
     }
@@ -181,30 +211,42 @@ public class Forecast implements Comparable<Forecast> {
         neff = getQuantity(value, unit);
     }
 
+    /**
+     * Returns the effective cloud cover.
+     */
     public double getNEFF(Unit<Dimensionless> unit) {
         return neff.to(unit).getValue().doubleValue();
-    }
-
-    public int getWW() {
-        return ww;
     }
 
     void setWW(int ww) {
         this.ww = ww;
     }
 
-    public int getWW3() {
-        return ww3;
+    /**
+     * Returns the significant weather code.
+     */
+    public int getWW() {
+        return ww;
     }
 
     void setWW3(int ww3) {
         this.ww3 = ww3;
     }
 
+    /**
+     * Returns the maximum significant weather code over 3 hours.
+     */
+    public int getWW3() {
+        return ww3;
+    }
+
     void setRR1(double value, Unit<Length> unit) {
         rr1 = getQuantity(value, unit);
     }
 
+    /**
+     * Returns the 1-hour precipitation amount.
+     */
     public double getRR1(Unit<Length> unit) {
         return rr1.to(unit).getValue().doubleValue();
     }
@@ -213,6 +255,9 @@ public class Forecast implements Comparable<Forecast> {
         rr3 = getQuantity(value, unit);
     }
 
+    /**
+     * Returns the 3-hours precipitation amount.
+     */
     public double getRR3(Unit<Length> unit) {
         return rr3.to(unit).getValue().doubleValue();
     }
@@ -221,6 +266,9 @@ public class Forecast implements Comparable<Forecast> {
         rr12 = getQuantity(value, unit);
     }
 
+    /**
+     * Returns the 12-hours precipitation amount.
+     */
     public double getRR12(Unit<Length> unit) {
         return rr12.to(unit).getValue().doubleValue();
     }
@@ -229,6 +277,9 @@ public class Forecast implements Comparable<Forecast> {
         rr24 = getQuantity(value, unit);
     }
 
+    /**
+     * Returns the 24-hours precipitation amount.
+     */
     public double getRR24(Unit<Length> unit) {
         return rr24.to(unit).getValue().doubleValue();
     }
@@ -237,6 +288,9 @@ public class Forecast implements Comparable<Forecast> {
         sund1 = getQuantity(value, unit);
     }
 
+    /**
+     * Returns the 1-hour sunshine duration.
+     */
     public double getSUND1(Unit<Time> unit) {
         return sund1.to(unit).getValue().doubleValue();
     }
@@ -245,6 +299,9 @@ public class Forecast implements Comparable<Forecast> {
         sund24 = getQuantity(value, unit);
     }
 
+    /**
+     * Returns the 24-hours sunshine duration.
+     */
     public double getSUND24(Unit<Time> unit) {
         return sund24.to(unit).getValue().doubleValue();
     }
@@ -253,6 +310,9 @@ public class Forecast implements Comparable<Forecast> {
         sund3 = getQuantity(value, unit);
     }
 
+    /**
+     * Returns the 3-hours sunshine duration.
+     */
     public double getSUND3(Unit<Time> unit) {
         return sund3.to(unit).getValue().doubleValue();
     }

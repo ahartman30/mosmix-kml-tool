@@ -1,20 +1,16 @@
 # MOSMIX KML Tool
 Java command line tool to extract data from DWD Open Data MOSMIX KML model run.
 
-Extracts data from a meteorological [DWD MOSMIX KML model run file](http://opendata.dwd.de/weather/local_forecasts/mos/ "DWD Opendata") into a readable CSV format for a given list of weather stations.
+Extracs data from a meteorological [DWD MOSMIX KML model run file](http://opendata.dwd.de/weather/local_forecasts/mos/ "DWD Opendata") into a readable CSV format for a given list of weather stations.
+More information at https://www.dwd.de/opendata.
 
 ## Usage
-    usage: mosmix-kml-tool --kml <KML-Datei> [--out <Ausgabeverzeichnis>]
-    --stations <Station1,Station2,...>
-    --kml <KML-Datei>                    MOSMIX KML Datei. Modellaufzeit
-                                         yyyMMddHH muss an dritter Stelle
-                                         stehen.
-    --out <Ausgabeverzeichnis>           Ausgabeverzeichnis fĂĽr die
-                                         CSV-Dateien. Ohne Angabe erfoglt
-                                         die Ausgabe auf die Konsole.
-    --stations <Station1,Station2,...>   Stationskennungen welche
-                                         extrahiert werden sollen, durch
-                                         Komma getrennt.
+    usage: mosmix-kml-tool --kml <KML File> [--out <Output directory>] --stations <station1,station2,...>
+    
+    --kml <KML File>                     MOSMIX KML file, underscore delimites. Model run time yyyyMMddHH has to be at third position.
+    --out <Output directory>             Output directory for the CSV file, else output to console standard out.
+    --stations <station1,station2,...>   Comma delimited station identifiers, whose data will be extracted.
+
 ## Example Output
     01025
     forecast;parameter;TT;Td;Tx;Tn;Tm;Tg;dd;ff;fx;fx3;RR1;RR3;RR12;RR24;ww;ww3;N;Nf;PPPP;SS1;SS3;SS24

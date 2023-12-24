@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="de.wsthst.opendata.mosmix.Main" />
+    <module name="mosmix-kml-tool" />
+    <option name="PROGRAM_PARAMETERS" value="--kml src\test\resources\MOSMIX_S_2018032907_240.kml --stations 10637,01025" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -2,6 +2,7 @@ package de.wsthst.opendata.mosmix;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.jetbrains.annotations.NotNull;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
@@ -13,14 +14,14 @@ import java.util.*;
 /**
  * Immutable value object for a complete point time forecast. Single forecasts are sorted ascending for forecast time.
  */
-public class PointTimeForecast implements Iterable<Forecast> {
+public final class PointTimeForecast implements Iterable<Forecast> {
 
-    private String stationId;
-    private Quantity<Angle> latitude;
-    private Quantity<Angle> longitude;
-    private Quantity<Length> height;
-    private Instant modelRunTime;
-    private List<Forecast> forecasts;
+    private final String stationId;
+    private final Quantity<Angle> latitude;
+    private final Quantity<Angle> longitude;
+    private final Quantity<Length> height;
+    private final Instant modelRunTime;
+    private final List<Forecast> forecasts;
 
     /**
      * Constructor.
@@ -67,7 +68,7 @@ public class PointTimeForecast implements Iterable<Forecast> {
     }
 
     @Override
-    public Iterator<Forecast> iterator() {
+    public @NotNull Iterator<Forecast> iterator() {
         return forecasts.iterator();
     }
 
