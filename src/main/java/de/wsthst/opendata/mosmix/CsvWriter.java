@@ -30,7 +30,7 @@ public final class CsvWriter {
             line
                 .append(modelRunTimeUtcMidnight.plusHours(hour).format(timeFormat)).append(";")
                 .append("---;---;---;---;---;---;---;---;---;---;---;---;---;---;---;---;---;---;---;---;---;---");
-            writer.println(line.toString());
+            writer.println(line);
             line.clear();
         }
 
@@ -60,7 +60,7 @@ public final class CsvWriter {
                 .append(Precision.round(fc.getSUND3(HOUR), 1)).append(";")
                 .append(Precision.round(fc.getSUND24(HOUR), 1))
                 .replaceAll("NaN", "---");
-            writer.println(line.toString());
+            writer.println(line);
             line.clear();
         }
     }

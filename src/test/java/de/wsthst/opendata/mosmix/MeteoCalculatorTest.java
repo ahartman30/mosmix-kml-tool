@@ -42,7 +42,7 @@ class MeteoCalculatorTest {
     IntStream
         .rangeClosed(1, 11)
         .boxed()
-        .forEach(value -> calculator.addRR1(value));
+        .forEach(calculator::addRR1);
     assertThat(calculator.getRR12(), is(NaN));
 
     calculator.addRR1(12);
@@ -58,7 +58,7 @@ class MeteoCalculatorTest {
     IntStream
         .rangeClosed(1, 23)
         .boxed()
-        .forEach(value -> calculator.addRR1(value));
+        .forEach(calculator::addRR1);
     assertThat(calculator.getRR24(), is(NaN));
 
     calculator.addRR1(24);
@@ -86,7 +86,7 @@ class MeteoCalculatorTest {
     IntStream
         .rangeClosed(1, 23)
         .boxed()
-        .forEach(value -> calculator.addSUND1(value));
+        .forEach(calculator::addSUND1);
     assertThat(calculator.getSUND24(), is(NaN));
 
     calculator.addSUND1(24);
@@ -102,7 +102,7 @@ class MeteoCalculatorTest {
     IntStream
         .rangeClosed(1, 23)
         .boxed()
-        .forEach(value -> calculator.addTTT(value));
+        .forEach(calculator::addTTT);
     assertThat(calculator.getTM(), is(NaN));
 
     calculator.addTTT(24);

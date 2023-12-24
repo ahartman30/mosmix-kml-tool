@@ -33,7 +33,7 @@ public final class Main {
 
         Instant modelRunTime = parseModelRuntime();
         List<PointTimeForecast> ptfcs;
-        try (InputStream kmlStream = new BufferedInputStream(Files.newInputStream(kmlFile));) {
+        try (InputStream kmlStream = new BufferedInputStream(Files.newInputStream(kmlFile))) {
             ptfcs = new MosmixKmlReader().read(kmlStream, modelRunTime, stationIds);
         }
 
