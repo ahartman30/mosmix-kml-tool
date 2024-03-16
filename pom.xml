@@ -13,7 +13,7 @@
     <maven.compiler.target>21</maven.compiler.target>
     <jdk.version>21.0.2.14.1</jdk.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.build.packageDirectory>${project.build.directory}/package</project.build.packageDirectory>
+    <project.build.packageDirectory>${project.build.directory}/package/mosmix-kml-tool-${project.version}</project.build.packageDirectory>
     <makeself.executable>../makeself-2.5.0/makeself.sh</makeself.executable>
   </properties>
 
@@ -25,7 +25,8 @@
         <targetPath>${project.build.packageDirectory}</targetPath>
         <filtering>true</filtering>
         <includes>
-          <include>make*</include>
+          <include>makeself.sh</include>
+          <include>mosmix-kml-tool.sh</include>
         </includes>
       </resource>
     </resources>
@@ -134,11 +135,27 @@
         </executions>
       </plugin>
 
+      <!-- Build makeself installer -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>3.2.0</version>
         <executions>
+          <execution>
+            <id>setup</id>
+            <phase>install</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>chmod</executable>
+              <workingDirectory>${project.build.packageDirectory}</workingDirectory>
+              <arguments>
+                <argument>a+x</argument>
+                <argument>makeself.sh</argument>
+              </arguments>
+            </configuration>
+          </execution>
           <execution>
             <id>makeself</id>
             <phase>install</phase>
