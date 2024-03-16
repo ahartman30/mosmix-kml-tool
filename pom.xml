@@ -11,10 +11,25 @@
   <properties>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
+    <jdk.version>21.0.2.14.1</jdk.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.packageDirectory>${project.build.directory}/package</project.build.packageDirectory>
+    <makeself.executable>../makeself-2.5.0/makeself.sh</makeself.executable>
   </properties>
 
   <build>
+
+    <resources>
+      <resource>
+        <directory>${project.basedir}/src/assembly</directory>
+        <targetPath>${project.build.packageDirectory}</targetPath>
+        <filtering>true</filtering>
+        <includes>
+          <include>make*</include>
+        </includes>
+      </resource>
+    </resources>
+
     <plugins>
 
       <plugin>
@@ -26,6 +41,7 @@
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.3.0</version>
         <configuration>
+          <outputDirectory>${project.build.packageDirectory}</outputDirectory>
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
@@ -47,7 +63,7 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              <outputDirectory>${project.build.packageDirectory}/lib</outputDirectory>
               <overWriteReleases>false</overWriteReleases>
               <overWriteSnapshots>false</overWriteSnapshots>
               <overWriteIfNewer>true</overWriteIfNewer>
@@ -57,12 +73,13 @@
         </executions>
       </plugin>
 
+      <!-- Build zip file -->
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.6.0</version>
         <configuration>
           <descriptors>
-            <descriptor>src/assembly/bin.xml</descriptor>
+            <descriptor>src/assembly/zip.xml</descriptor>
           </descriptors>
         </configuration>
         <executions>
@@ -71,6 +88,76 @@
             <goals>
               <goal>single</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Download and rename JDK -->
+      <plugin>
+        <groupId>com.googlecode.maven-download-plugin</groupId>
+        <artifactId>download-maven-plugin</artifactId>
+        <version>1.8.1</version>
+        <executions>
+          <execution>
+            <id>install-jdk</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>wget</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <url>https://corretto.aws/downloads/resources/${jdk.version}/amazon-corretto-${jdk.version}-linux-x64.tar.gz</url>
+          <sha256>9e421102813f97d67f26ddbbafe4d05e7e9e3bdb07ad0fc97c685470f0b993fd</sha256>
+          <outputDirectory>${project.build.directory}</outputDirectory>
+          <unpack>true</unpack>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>com.coderplus.maven.plugins</groupId>
+        <artifactId>copy-rename-maven-plugin</artifactId>
+        <version>1.0.1</version>
+        <executions>
+          <execution>
+            <id>rename-jdk</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>rename</goal>
+            </goals>
+            <configuration>
+              <sourceFile>${project.build.directory}/amazon-corretto-${jdk.version}-linux-x64</sourceFile>
+              <destinationFile>${project.build.packageDirectory}/jdk</destinationFile>
+              <overWrite>true</overWrite>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <id>makeself</id>
+            <phase>install</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>${makeself.executable}</executable>
+              <workingDirectory>${project.build.directory}/package</workingDirectory>
+              <arguments>
+                <argument>--tar-quietly</argument>
+                <argument>--notemp</argument>
+                <argument>./mosmix-kml-tool-${project.version}</argument>
+                <argument>install-mosmix-kml-tool-${project.version}.run</argument>
+                <argument>MOSMIX KML Tool ${project.version}</argument>
+                <argument>./makeself.sh</argument>
+                <argument>${project.version}</argument>
+              </arguments>
+            </configuration>
           </execution>
         </executions>
       </plugin>
