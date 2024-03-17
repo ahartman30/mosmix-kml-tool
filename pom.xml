@@ -22,7 +22,7 @@
     <resources>
       <resource>
         <directory>${project.basedir}/src/assembly</directory>
-        <targetPath>${project.build.packageDirectory}</targetPath>
+        <targetPath>${project.build.directory}/resources</targetPath>
         <filtering>true</filtering>
         <includes>
           <include>makeself.sh</include>
@@ -53,13 +53,14 @@
         </configuration>
       </plugin>
 
+      <!-- Copy dependencies to package dir -->
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
         <version>3.6.1</version>
         <executions>
           <execution>
             <id>copy-dependencies</id>
-            <phase>package</phase>
+            <phase>prepare-package</phase>
             <goals>
               <goal>copy-dependencies</goal>
             </goals>
@@ -74,25 +75,6 @@
         </executions>
       </plugin>
 
-      <!-- Build zip file -->
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.6.0</version>
-        <configuration>
-          <descriptors>
-            <descriptor>src/assembly/zip.xml</descriptor>
-          </descriptors>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
       <!-- Download and rename JDK -->
       <plugin>
         <groupId>com.googlecode.maven-download-plugin</groupId>
@@ -101,7 +83,7 @@
         <executions>
           <execution>
             <id>install-jdk</id>
-            <phase>process-resources</phase>
+            <phase>prepare-package</phase>
             <goals>
               <goal>wget</goal>
             </goals>
@@ -122,7 +104,7 @@
         <executions>
           <execution>
             <id>rename-jdk</id>
-            <phase>process-resources</phase>
+            <phase>prepare-package</phase>
             <goals>
               <goal>rename</goal>
             </goals>
@@ -135,27 +117,35 @@
         </executions>
       </plugin>
 
+      <!-- Assemble -->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.7.0</version>
+        <configuration>
+          <appendAssemblyId>false</appendAssemblyId>
+          <outputDirectory>${project.build.directory}/package</outputDirectory>
+          <attach>false</attach>
+          <descriptors>
+            <descriptor>src/assembly/package.xml</descriptor>
+            <descriptor>src/assembly/zip.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
       <!-- Build makeself installer -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>3.2.0</version>
         <executions>
-          <execution>
-            <id>setup</id>
-            <phase>install</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <executable>chmod</executable>
-              <workingDirectory>${project.build.packageDirectory}</workingDirectory>
-              <arguments>
-                <argument>a+x</argument>
-                <argument>makeself.sh</argument>
-              </arguments>
-            </configuration>
-          </execution>
           <execution>
             <id>makeself</id>
             <phase>install</phase>
