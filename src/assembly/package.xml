@@ -12,6 +12,7 @@
       <outputDirectory/>
       <includes>
         <include>*.sh</include>
+        <include>mosmix2json/*</include>
       </includes>
       <fileMode>0755</fileMode>
     </fileSet>
