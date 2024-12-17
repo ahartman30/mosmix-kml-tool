@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # coding=UTF-8
 
-import json, csv, argparse
+import json, csv, argparse, os
 from datetime import datetime
 from pytz import timezone, utc
 
@@ -56,9 +56,10 @@ with open(args.mosmix, encoding='UTF-8') as mosmixFile:
             element_values.append(value)
 
 # WWN
-with open('ww.json', encoding='UTF-8') as file:
+baseDir = os.path.dirname(os.path.realpath(__file__))
+with open(baseDir + '/ww.json', encoding='UTF-8') as file:
     WW = json.load(file)
-with open('n.json', encoding='UTF-8') as file:
+with open(baseDir + '/n.json', encoding='UTF-8') as file:
     N = json.load(file)
 
 wwn = []
@@ -141,10 +142,10 @@ data['fx3_html'] = fx
 
 fx = []
 for value in data['fx']:
-     if value != '---' and float(value) >= 40:
-         fx.append("<font color='red'><b>{:.0f}</b></font>".format(float(value)))
-     else:
-         fx.append('---')
+    if value != '---' and float(value) >= 40:
+        fx.append("<font color='red'><b>{:.0f}</b></font>".format(float(value)))
+    else:
+        fx.append('---')
 data['fx1_html'] = fx
 
 # Modelrun
