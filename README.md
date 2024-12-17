@@ -19,3 +19,5 @@ More information at https://www.dwd.de/opendata.
     29.03.18;08:00;-1.3;-2.9;---;---;---;---;306;13.0;---;25.9;0.4;---;---;---;85;0;7;7;1008.2;---;---;---
     29.03.18;09:00;-1.4;-3.1;---;---;---;---;323;13.0;---;22.2;0.3;1.1;---;---;85;0;7;7;1008.5;---;---;---
     
+## MOSMIX 2 JSON
+An additional Python script `mosmix2json.py` can be applied to a MOSMIX CSV ouput for conversation to JSON format. Some additional meteorological values, like WWN, are calculated and postprocessed in this output.
